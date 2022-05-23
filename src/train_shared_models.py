@@ -1,7 +1,7 @@
 import argparse
 from utils import *
 import numpy as np
-from models.DeepPHiC import DeepPHiC
+from DeepPHiC import DeepPHiC
 
 def train(tissues, args):
     # Leave the tissue that you want to train the model for, otherwise, training
@@ -95,25 +95,32 @@ def train(tissues, args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Arguments for training.')
     parser.add_argument(
-        '--type', default='pe', type=str, choices=['pe', 'pp'],
+        '--type', default='pp', type=str, choices=['pe', 'pp'],
         help='interaction type'
     )
     parser.add_argument(
         '--epochs', default=200, type=int, help='maximum training epochs'
     )
     parser.add_argument(
-        '--lr', default=1e-4, type=int, help='learning rate'
+        '--lr', default=1e-3, type=int, help='learning rate'
     )
     parser.add_argument(
         '--dropout', default=0.5, type=float, help='dropout'
     )
+    parser.add_argument(
+        '--test', default=True, type=bool, 
+        help='test flag to work on sample data'
+    )
     args = parser.parse_args()
 
-    with open('../res/tissues.json', 'r') as f:
-        if args.type == 'pe':
-            tissues = json.load(f)['pe']
-        else:
-            tissues = json.load(f)['pp']
+    if args.test:
+        tissues = ['AO', 'CM', 'LV', 'RV']
+    else:
+        with open('../res/tissues.json', 'r') as f:
+            if args.type == 'pe':
+                tissues = json.load(f)['pe']
+            else:
+                tissues = json.load(f)['pp']
 
     train(tissues, args)
     print('done')
