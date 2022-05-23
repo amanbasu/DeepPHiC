@@ -90,5 +90,5 @@ Reads the model statistics from the `results/stats/` folder and plots the ROC cu
 python plot_roc.py --type pp --tissue LV
 ```
 
-<img src="results/plots/roc_curve_LV_pp.jpg" width="500px"/>
-<p>Figure 2. ROC curve for LV tissue for promoter-promoter (pp) interaction.</p>
+<p align="center"><img src="results/plots/roc_curve_LV_pp.jpg" width="500px"/></p>
+<p align="center">Figure 2. ROC curve for LV tissue for promoter-promoter (pp) interaction.</p>
