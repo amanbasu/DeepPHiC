@@ -1,6 +1,5 @@
 import json
 import argparse
-import numpy as np
 from utils import *
 from DeepPHiC import DeepPHiC
 
