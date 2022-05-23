@@ -52,7 +52,7 @@ optional arguments:
 
 ### Train base model
 
-To train one DeepPHiC-Base model per tissue. You can contol the promoter-promoter (pp) or promoter-enhanced (pe) interaction type using the `--type` argument. Set `--test False` if you want to train the model for all available tissues.
+To train one DeepPHiC-Base model per tissue. You can contol the promoter-promoter (pp) or promoter-enhancer (pe) interaction type using the `--type` argument. Set `--test False` if you want to train the model for all available tissues.
 
 ```bash
 python train_base.py --type pp --epochs 1 --test True
@@ -60,7 +60,7 @@ python train_base.py --type pp --epochs 1 --test True
 
 ### Train shared model
 
-Shared models will use all the tissues for training as discribed in the figure above. When you train a shared model for one tissue, all the tissues will be used for training except that tissue, so that the training data does not leak into the testing data. All the shared models will be stored in the  `models/shared/` folder.
+Shared models will use all the tissues for training as discribed in the Figure 1. When you train a shared model for one tissue, all the tissues will be used for training except that tissue, so that the training data does not leak into the testing data. All the shared models will be stored in the  `models/shared/` folder.
 
 ```bash
 python train_shared_models.py --type pp --dropout 0.5 --test True
