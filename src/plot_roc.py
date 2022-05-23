@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def plot_roc(model, label, args):
     fprs, tprs, aucs = [], [], []
     for mod in model:
-        with open('../res/stats/{}_{}_{}.json'.format(
+        with open('../results/stats/{}_{}_{}.json'.format(
             mod, args.tissue, args.type
         ), 'r') as file:
             stats = json.load(file)
@@ -25,7 +25,7 @@ def plot_roc(model, label, args):
     plt.ylabel('True Positive Rate', fontsize=15)
     plt.legend(loc="lower right")
     plt.title('ROC Curve - {} {}'.format(args.tissue, args.type), fontsize=15)
-    plt.savefig('../roc_curve_{}_{}.jpg'.format(args.tissue, args.type), dpi=250)
+    plt.savefig('../results/plots/roc_curve_{}_{}.jpg'.format(args.tissue, args.type), dpi=250)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Arguments for training.')

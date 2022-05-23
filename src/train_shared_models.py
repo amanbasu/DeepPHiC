@@ -1,7 +1,7 @@
 import json
 import argparse
-from utils import *
 import numpy as np
+from utils import *
 from DeepPHiC import DeepPHiC
 
 def train(tissues, args):
@@ -36,10 +36,7 @@ def train(tissues, args):
 
             ########## split into train and val ##########
             N = len(x1_seq)        
-            index = list(range(N))
-            np.random.seed(0)
-            np.random.shuffle(index)
-            train_idx, val_idx, test_idx = get_split(index, N)
+            train_idx, val_idx, test_idx = get_split(N)
 
             # merge train and test data for shared model
             # effective split - train : val = 0.85 : 0.15
@@ -90,7 +87,7 @@ def train(tissues, args):
             ),
             epochs=args.epochs
         )
-        model.save_model('../res/shared_model/DeepPHiC_{}_{}.h5'.format(
+        model.save_model('../models/shared/DeepPHiC_{}_{}.h5'.format(
             tissue_of_concern, args.type
         ))
 

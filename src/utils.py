@@ -64,7 +64,7 @@ Combine negative and positive samples into one.
 '''
 def get_features(tissue, type):
     seq, read, dist = [], [], []
-    hf = h5py.File('../res/data/features_{}_{}.h5'.format(tissue, type), 'r')
+    hf = h5py.File('../data/features_{}_{}.h5'.format(tissue, type), 'r')
     for i in [1, 2]:
         for j in ['neg', 'pos']:
             seq.append(np.array(hf[f'seq{i}_{j}']))
@@ -87,7 +87,11 @@ def get_features(tissue, type):
 Splits the index into train, val, and test set.
 Train : val : test = 0.7 : 0.15 : 0.15
 '''
-def get_split(index, N):
+def get_split(N, seed=0):
+    index = list(range(N))
+    np.random.seed(seed)
+    np.random.shuffle(index)
+
     cut = [int(0.7*N), int(0.85*N)]
     index = np.array(index)
 

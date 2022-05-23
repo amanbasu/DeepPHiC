@@ -18,10 +18,7 @@ def train(tissues, args):
         ########## train-test-val split ##########
         # 70% train, 15% val, 15% test
         N = len(x1_seq)
-        index = list(range(N))
-        np.random.seed(0)
-        np.random.shuffle(index)
-        train_idx, val_idx, test_idx = get_split(index, N)
+        train_idx, val_idx, test_idx = get_split(N)
 
         ########## data normalization ##########
         x1_read = normalize(x1_read, train_idx)
@@ -52,7 +49,7 @@ def train(tissues, args):
         stats = get_stats(y[test_idx], y_hat)
 
         ########## save results ########## 
-        RESULT_FILE = '../res/stats/DeepPHiC_base_{}_{}.json'.format(
+        RESULT_FILE = '../results/stats/DeepPHiC_base_{}_{}.json'.format(
             tissue, args.type
         )
         with open(RESULT_FILE, 'w', encoding='utf-8') as f:
