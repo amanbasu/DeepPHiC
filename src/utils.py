@@ -1,7 +1,6 @@
+import h5py
 import numpy as np
 from sklearn.metrics import roc_auc_score, roc_curve, precision_recall_curve, auc
-
-BASE_PATH = '/N/slate/amanagar/interaction/h5'
 
 '''
 Stack positive and negative samples
@@ -56,7 +55,7 @@ Combine negative and positive samples into one.
 '''
 def get_features(tissue, type):
     seq, read, dist = [], [], []
-    hf = h5py.File('{}/{}/features_{}.h5'.format(BASE_PATH, type, tissue), 'r')
+    hf = h5py.File('../res/features_{}_{}.h5'.format(tissue, type), 'r')
     for i in [1, 2]:
         for j in ['neg', 'pos']:
             seq.append(np.array(hf[f'seq{i}_{j}']))
