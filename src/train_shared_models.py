@@ -1,25 +1,7 @@
 import argparse
 from utils import *
 import numpy as np
-from models.ChINN import ChINN
-from models.DeepMILO import DeepMILO
 from models.DeepPHiC import DeepPHiC
-from models.DeepTACT import DeepTACT
-from models.SPEID import SPEID
-
-def get_model(name, dropout=0.5):
-    if name == 'ChINN':
-        return ChINN(dropout=dropout)
-    elif name == 'DeepMILO':
-        return DeepMILO(dropout=dropout)
-    elif name == 'DeepPHiC':
-        return DeepPHiC(dropout=dropout)
-    elif name == 'DeepTACT':
-        return DeepTACT(dropout=dropout)
-    elif name == 'SPEID':
-        return SPEID(dropout=dropout)
-    else:
-        return None
 
 def train(tissues, args):
     # Leave the tissue that you want to train the model for, otherwise, training
@@ -93,8 +75,8 @@ def train(tissues, args):
         label_val = np.vstack(label_val)
 
         ########## train shared model ##########
-        print(f'training shared {args.model}...')
-        model = get_model(name=args.model, dropout=0.5)                         # a higher dropout to prevent overfitting
+        print(f'training shared DeepPHiC...')
+        model = DeepPHiC(learning_rate=args.lr, dropout=args.dropout)           # a higher dropout would prevent overfitting
         model.fit(
             features_train['x1_seq'], features_train['x2_seq'], 
             features_train['x1_read'] , features_train['x2_read'],
@@ -106,39 +88,32 @@ def train(tissues, args):
             ),
             epochs=args.epochs
         )
-        model.save_model('../res/shared_model/{}_{}_{}.h5'.format(
-            args.model, tissue_of_concern, args.type
+        model.save_model('../res/shared_model/DeepPHiC_{}_{}.h5'.format(
+            tissue_of_concern, args.type
         ))
 
 if __name__ == '__main__':
-    TYPES = ['po', 'pp']    
-    MODELS = ['ChINN', 'DeepMILO', 'DeepPHiC', 'DeepTACT', 'SPEID']
-
     parser = argparse.ArgumentParser(description='Arguments for training.')
     parser.add_argument(
-        '--model', default='DeepPHiC', type=str, choices=MODELS, 
-        help='model for training'
-    )
-    parser.add_argument(
-        '--type', default='po', type=str, choices=TYPES, help='feature type'
+        '--type', default='pe', type=str, choices=['pe', 'pp'],
+        help='interaction type'
     )
     parser.add_argument(
         '--epochs', default=200, type=int, help='maximum training epochs'
     )
+    parser.add_argument(
+        '--lr', default=1e-4, type=int, help='learning rate'
+    )
+    parser.add_argument(
+        '--dropout', default=0.5, type=float, help='dropout'
+    )
     args = parser.parse_args()
 
-    if args.type == 'po':
-        tissues = [
-            'AD2', 'AO', 'BL1', 'CM', 'EG2', 'FT2', 'GA', 'GM', 'H1', 'HCmerge', 
-            'IMR90', 'LG', 'LI11', 'LV', 'ME', 'MSC', 'NPC', 'OV2', 'PA', 'PO3', 
-            'RA3', 'RV', 'SB', 'SX', 'TB', 'TH1', 'X5628FC'
-        ]
-    elif args.type == 'pp':
-        tissues = [
-            'AD2', 'AO', 'BL1', 'CM', 'GA', 'GM', 'H1', 'HCmerge', 'IMR90', 
-            'LG', 'LI11', 'LV', 'ME', 'MSC', 'NPC', 'OV2', 'PA', 'PO3', 'RV',
-            'SB', 'SG1', 'SX', 'TB', 'TH1', 'X5628FC'
-        ]
+    with open('../res/tissues.json', 'r') as f:
+        if args.type == 'pe':
+            tissues = json.load(f)['pe']
+        else:
+            tissues = json.load(f)['pp']
 
     train(tissues, args)
     print('done')

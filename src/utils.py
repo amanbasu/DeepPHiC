@@ -1,13 +1,7 @@
 import numpy as np
 from sklearn.metrics import roc_auc_score, roc_curve, precision_recall_curve, auc
 
-BASE_PATH = '/N/slate/amanagar/interaction'
-
-'''
-Load .npy files from storage
-'''
-def load_npy(feat, tissue, file_type):
-    return np.load('{}/py/{}_{}_{}.npy'.format(BASE_PATH, feat, tissue, file_type))
+BASE_PATH = '/N/slate/amanagar/interaction/h5'
 
 '''
 Stack positive and negative samples
@@ -60,13 +54,15 @@ def get_stats(y, y_hat):
 '''
 Combine negative and positive samples into one.
 '''
-def get_features(tissue, file_type):
+def get_features(tissue, type):
     seq, read, dist = [], [], []
+    hf = h5py.File('{}/{}/features_{}.h5'.format(BASE_PATH, type, tissue), 'r')
     for i in [1, 2]:
         for j in ['neg', 'pos']:
-            seq.append(load_npy('seq{}_{}_2k'.format(i, j), tissue, file_type))
-            read.append(load_npy('anchor{}_{}_2k'.format(i, j), tissue, file_type))
-            dist.append(load_npy('anchor{}_{}_dist_2k'.format(i, j), tissue, file_type))
+            seq.append(np.array(hf[f'seq{i}_{j}']))
+            read.append(np.array(hf[f'read{i}_{j}']))
+            dist.append(np.array(hf[f'dist{i}_{j}']))
+    hf.close()
 
     x1_seq, x2_seq, y = combine_features(seq)
     print('x1-seq, x2-seq, and y shape:', x1_seq.shape, x2_seq.shape, y.shape)

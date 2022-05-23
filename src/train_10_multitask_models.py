@@ -66,7 +66,7 @@ def train(tissues, args):
             ########## train models ##########
             print('training DeepPHiCFusion...')
             np.random.seed(iter)
-            model = DeepPHiCFusion(learning_rate=1e-4)
+            model = DeepPHiCFusion(learning_rate=args.lr, dropout=args.dropout)
             model.fit(
                 x1_seq[train_idx], x2_seq[train_idx], 
                 x1_read[train_idx], x2_read[train_idx],
@@ -97,29 +97,27 @@ def train(tissues, args):
             json.dump(aucs, f, ensure_ascii=False, indent=4)
 
 if __name__ == '__main__':
-    TYPES = ['po', 'pp']    
-
     parser = argparse.ArgumentParser(description='Arguments for training.')
     parser.add_argument(
-        '--type', default='po', type=str, choices=TYPES, help='feature type'
+        '--type', default='pe', type=str, choices=['pe', 'pp'],
+        help='interaction type'
     )
     parser.add_argument(
         '--epochs', default=200, type=int, help='maximum training epochs'
     )
+    parser.add_argument(
+        '--lr', default=1e-4, type=float, help='learning rate'
+    )
+    parser.add_argument(
+        '--dropout', default=0.2, type=float, help='dropout'
+    )
     args = parser.parse_args()
 
-    if args.type == 'po':
-        tissues = [
-            'AD2', 'AO', 'BL1', 'CM', 'EG2', 'FT2', 'GA', 'GM', 'H1', 'HCmerge', 
-            'IMR90', 'LG', 'LI11', 'LV', 'ME', 'MSC', 'NPC', 'OV2', 'PA', 'PO3', 
-            'RA3', 'RV', 'SB', 'SX', 'TB', 'TH1', 'X5628FC'
-        ]
-    elif args.type == 'pp':
-        tissues = [
-            'AD2', 'AO', 'BL1', 'CM', 'GA', 'GM', 'H1', 'HCmerge', 'IMR90', 
-            'LG', 'LI11', 'LV', 'ME', 'MSC', 'NPC', 'OV2', 'PA', 'PO3', 'RV',
-            'SB', 'SG1', 'SX', 'TB', 'TH1', 'X5628FC'
-        ]
-
+    with open('../res/tissues.json', 'r') as f:
+        if args.type == 'pe':
+            tissues = json.load(f)['pe']
+        else:
+            tissues = json.load(f)['pp']
+            
     train(tissues, args)
     print('done')
