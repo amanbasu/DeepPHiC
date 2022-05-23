@@ -1,3 +1,4 @@
+import json
 import argparse
 from utils import *
 import numpy as np
@@ -76,6 +77,7 @@ def train(tissues, args):
 
         ########## train shared model ##########
         print(f'training shared DeepPHiC...')
+        np.random.seed(0)
         model = DeepPHiC(learning_rate=args.lr, dropout=args.dropout)           # a higher dropout would prevent overfitting
         model.fit(
             features_train['x1_seq'], features_train['x2_seq'], 

@@ -1,6 +1,7 @@
 import h5py
 import numpy as np
-from sklearn.metrics import roc_auc_score, roc_curve, precision_recall_curve, auc
+from sklearn.metrics import roc_auc_score, auc
+from sklearn.metrics import roc_curve, precision_recall_curve
 
 '''
 Stack positive and negative samples
@@ -45,8 +46,16 @@ def get_stats(y, y_hat):
     precision, recall, _ = precision_recall_curve(y, y_hat)
     auprc = auc(recall, precision)
 
-    stats = {'acc': acc, 'auroc': auroc, 'fpr': fpr.tolist(), 'tpr': tpr.tolist(), 'auprc': auprc}
-    print('****** AUROC: {:.3f} - AUPRC: {:.3f} ******'.format(stats['auroc'], stats['auprc']))
+    stats = {
+        'acc': acc, 
+        'auroc': auroc,
+        'auprc': auprc, 
+        'fpr': fpr.tolist(), 
+        'tpr': tpr.tolist()
+    }
+    print('****** AUROC: {:.3f} - AUPRC: {:.3f} ******'.format(
+        stats['auroc'], stats['auprc']
+    ))
 
     return stats
 
@@ -55,7 +64,7 @@ Combine negative and positive samples into one.
 '''
 def get_features(tissue, type):
     seq, read, dist = [], [], []
-    hf = h5py.File('../res/h5/features_{}_{}.h5'.format(tissue, type), 'r')
+    hf = h5py.File('../res/data/features_{}_{}.h5'.format(tissue, type), 'r')
     for i in [1, 2]:
         for j in ['neg', 'pos']:
             seq.append(np.array(hf[f'seq{i}_{j}']))
