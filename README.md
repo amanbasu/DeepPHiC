@@ -1,5 +1,7 @@
 # DeepPHiC: Predicting promoter-centered chromatin interactions using a deep learning approach
 
+Paper link: https://doi.org/10.1093/bioinformatics/btac801
+
 We developed a supervised multi-modal deep learning model, which utilizes a comprehensive set of features including genomic sequence, epigenetic signals and anchor distance to predict tissue/cell type-specific genome-wide promoter-enhancer and promoter-promoter interactions. We further extend the deep learning model in a multi-task learning and transfer learning framework. We demonstrate that the proposed approach outperforms state-of-the-art deep learning approaches and robust to the inclusion of anchor distance. In addition, we find that the proposed approach can achieve comparable prediction performance using biologically relevant tissues/cell types compared to using all tissues/cell types especially for predicting promoter-enhancer interactions.
 
 <p align="center"><img src="res/overview.png"/></p>
@@ -92,3 +94,23 @@ python plot_roc.py --type pp --tissue LV
 
 <p align="center"><img src="results/plots/roc_curve_LV_pp.jpg" width="500px"/></p>
 <p align="center">Figure 2. ROC curve for LV tissue for promoter-promoter (pp) interaction.</p>
+
+
+## Citation
+
+```
+@article{10.1093/bioinformatics/btac801,
+    author = {Agarwal, Aman and Chen, Li},
+    title = "{DeepPHiC: predicting promoter-centered chromatin interactions using a novel deep learning approach}",
+    journal = {Bioinformatics},
+    volume = {39},
+    number = {1},
+    year = {2022},
+    month = {12},
+    issn = {1367-4811},
+    doi = {10.1093/bioinformatics/btac801},
+    url = {https://doi.org/10.1093/bioinformatics/btac801},
+    note = {btac801},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/39/1/btac801/48520967/btac801\_supplementary\_data.pdf},
+}
+```
